@@ -137,7 +137,7 @@ public class MinecartStarter extends JavaPlugin {
 				World w = ((Player) sender).getWorld();
 				int amion = w.getBlockTypeIdAt(((Player) sender).getLocation());
 				if (amion == 66) {
-					Minecart m = w.spawnMinecart(((Player) sender).getLocation());
+					Minecart m = w.spawn(((Player) sender).getLocation(), Minecart.class);
 					m.setPassenger(((Player) sender));
 
 					this.mcarts.add(m);
