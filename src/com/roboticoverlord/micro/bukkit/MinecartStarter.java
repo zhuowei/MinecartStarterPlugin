@@ -38,7 +38,7 @@ public class MinecartStarter extends JavaPlugin {
 	/**
 	 * List of minecart entities
 	 */
-	public ArrayList mcarts;
+	public ArrayList<Minecart> mcarts;
 	/**
 	 * Permission plugin
 	 */
@@ -49,7 +49,7 @@ public class MinecartStarter extends JavaPlugin {
 	public boolean permsPluginAvailable;
 
 	public MinecartStarter() {
-		this.mcarts = new ArrayList();
+		this.mcarts = new ArrayList<Minecart>();
 	}
 
 	/**
@@ -73,6 +73,7 @@ public class MinecartStarter extends JavaPlugin {
 		//this.cartMonitor.start();
 
 		//Event updates the database file on quit
+		pm.registerEvent(Event.Type.VEHICLE_DAMAGE, this.vehicleListener, Event.Priority.Normal, this);
 		pm.registerEvent(Event.Type.VEHICLE_EXIT, this.vehicleListener, Event.Priority.Normal, this);
 		pm.registerEvent(Event.Type.PLAYER_TELEPORT, this.playerListener, Event.Priority.Normal, this);
 
@@ -136,7 +137,7 @@ public class MinecartStarter extends JavaPlugin {
 				
 				World w = ((Player) sender).getWorld();
 				int amion = w.getBlockTypeIdAt(((Player) sender).getLocation());
-				if (amion == 66) {
+				if (amion == 66 || amion == 27 || amion == 28) {
 					Minecart m = w.spawn(((Player) sender).getLocation(), Minecart.class);
 					m.setPassenger(((Player) sender));
 

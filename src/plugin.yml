@@ -1,6 +1,6 @@
 name: MoreMinecartStarter
 main: com.roboticoverlord.micro.bukkit.MinecartStarter
-version: 1.1
+version: 1.2
 commands:
     minecart:
         description: Spawns a minecart, places player in, and gives it initial momentum.
