@@ -14,12 +14,8 @@ import org.bukkit.plugin.PluginDescriptionFile;
 import org.bukkit.plugin.PluginManager;
 import org.bukkit.util.Vector;
 
-//Permissions imports
-import com.nijiko.permissions.PermissionHandler;
-import com.nijikokun.bukkit.Permissions.Permissions;
-
 //Java imports
-import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.logging.Logger;
 import org.bukkit.World;
 import org.bukkit.event.player.PlayerListener;
@@ -38,18 +34,10 @@ public class MinecartStarter extends JavaPlugin {
 	/**
 	 * List of minecart entities
 	 */
-	public ArrayList<Minecart> mcarts;
-	/**
-	 * Permission plugin
-	 */
-	public static PermissionHandler Permissions = null;
-	/**
-	 * Whether or not to use permissions
-	 */
-	public boolean permsPluginAvailable;
+	public HashSet<Minecart> mcarts;
 
 	public MinecartStarter() {
-		this.mcarts = new ArrayList<Minecart>();
+		this.mcarts = new HashSet<Minecart>();
 	}
 
 	/**
@@ -65,7 +53,6 @@ public class MinecartStarter extends JavaPlugin {
 	 */
 	public void onEnable() {
 
-		this.setupPermissions();
 		this.mcarts.clear();
 
 		PluginManager pm = getServer().getPluginManager();
@@ -83,33 +70,7 @@ public class MinecartStarter extends JavaPlugin {
 	}
 
 	private boolean hasPermission(Player p) {
-		if (this.permsPluginAvailable) {
-			return Permissions.has(p, "micro.minecartstarter.can") || p.isOp();
-		} else {
-			return true;
-		}
-	}
-
-	/**
-	 * Checks that Permissions is installed.
-	 */
-	public void setupPermissions() {
-
-		Plugin perm_plugin = this.getServer().getPluginManager().getPlugin("Permissions");
-		PluginDescriptionFile pdfFile = this.getDescription();
-
-		if (Permissions == null) {
-			if (perm_plugin != null) {
-				//Permissions found, enable it now
-				this.getServer().getPluginManager().enablePlugin(perm_plugin);
-				Permissions = ((Permissions) perm_plugin).getHandler();
-				this.permsPluginAvailable = true;
-			} else {
-				//Permissions not found. Disable plugin
-				log.log(Level.INFO, "{0} version {1} using op-code, Permissions not detected", new Object[]{pdfFile.getName(), pdfFile.getVersion()});
-				this.permsPluginAvailable = false;
-			}
-		}
+		return p.hasPermission("micro.minecartstarter.can");
 	}
 
 	private boolean isAnonymous(Object t) {
@@ -129,10 +90,11 @@ public class MinecartStarter extends JavaPlugin {
 			if (commandName.equals("minecart")) {
 
 				if (this.isAnonymous(sender)) {
-					return true;
+					return false;
 				}
 				if (!this.hasPermission(player)) {
-					return true;
+					sender.sendMessage("You don't have permission.");
+					return false;
 				}
 				
 				World w = ((Player) sender).getWorld();
@@ -167,7 +129,7 @@ public class MinecartStarter extends JavaPlugin {
 					m.setVelocity(v);
 				}
 
-				return false;
+				return true;
 			}
 
 
