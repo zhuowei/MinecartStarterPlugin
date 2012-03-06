@@ -5,14 +5,15 @@
 
 package com.roboticoverlord.micro.bukkit;
 
-import org.bukkit.event.player.PlayerListener;
+import org.bukkit.event.EventHandler;
+import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerTeleportEvent;
 
 /**
  *
  * @author Owner
  */
-public class MinecartStarterPlayerListener extends PlayerListener {
+public class MinecartStarterPlayerListener implements Listener {
 
 	MinecartStarter parent;
 
@@ -20,7 +21,7 @@ public class MinecartStarterPlayerListener extends PlayerListener {
 		this.parent = p;
 	}
 
-	@Override
+	@EventHandler
 	public void onPlayerTeleport(PlayerTeleportEvent e) {
 		if(e.getPlayer().isInsideVehicle()) {
 			if(this.parent.mcarts.contains(e.getPlayer().getVehicle())) {

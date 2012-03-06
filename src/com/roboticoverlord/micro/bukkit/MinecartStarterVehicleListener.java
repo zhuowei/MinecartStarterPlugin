@@ -1,12 +1,13 @@
 package com.roboticoverlord.micro.bukkit;
 
 import org.bukkit.entity.Minecart;
+import org.bukkit.event.EventHandler;
+import org.bukkit.event.Listener;
 import org.bukkit.event.vehicle.VehicleDamageEvent;
 import org.bukkit.event.vehicle.VehicleDestroyEvent;
 import org.bukkit.event.vehicle.VehicleExitEvent;
-import org.bukkit.event.vehicle.VehicleListener;
 
-public class MinecartStarterVehicleListener extends VehicleListener {
+public class MinecartStarterVehicleListener implements Listener {
 
 	private MinecartStarter parent;
 
@@ -14,6 +15,7 @@ public class MinecartStarterVehicleListener extends VehicleListener {
 		this.parent = parent;
 	}
 
+	@EventHandler
 	public void onVehicleDamage(VehicleDamageEvent e) {
 		if (e.getVehicle() instanceof Minecart) {
 			if (parent.mcarts.contains(e.getVehicle())) {
@@ -22,7 +24,7 @@ public class MinecartStarterVehicleListener extends VehicleListener {
 		}
 	}
 
-	@Override
+	@EventHandler
 	public void onVehicleExit(VehicleExitEvent e) {
 		if (e.getVehicle() instanceof Minecart) {
 			if (parent.mcarts.contains(e.getVehicle())) {

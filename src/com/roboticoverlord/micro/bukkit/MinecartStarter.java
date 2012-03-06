@@ -7,7 +7,7 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Minecart;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Event;
-import org.bukkit.event.vehicle.VehicleListener;
+import org.bukkit.event.Listener;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.PluginDescriptionFile;
@@ -18,15 +18,14 @@ import org.bukkit.util.Vector;
 import java.util.HashSet;
 import java.util.logging.Logger;
 import org.bukkit.World;
-import org.bukkit.event.player.PlayerListener;
 
 public class MinecartStarter extends JavaPlugin {
 
 	/**
 	 * Minecart listener class
 	 */
-	VehicleListener vehicleListener = new MinecartStarterVehicleListener(this);
-	PlayerListener playerListener = new MinecartStarterPlayerListener(this);
+	Listener vehicleListener = new MinecartStarterVehicleListener(this);
+	Listener playerListener = new MinecartStarterPlayerListener(this);
 	/**
 	 * Logger magic
 	 */
@@ -45,7 +44,7 @@ public class MinecartStarter extends JavaPlugin {
 	 */
 	public void onDisable() {
 		this.mcarts.clear();
-		log.log(Level.INFO,"[{0}] Plugin disabled. (version{1})", new Object[]{this.getDescription().getName(), this.getDescription().getVersion()});
+		//log.log(Level.INFO,"[{0}] Plugin disabled. (version{1})", new Object[]{this.getDescription().getName(), this.getDescription().getVersion()});
 	}
 
 	/**
@@ -60,9 +59,8 @@ public class MinecartStarter extends JavaPlugin {
 		//this.cartMonitor.start();
 
 		//Event updates the database file on quit
-		pm.registerEvent(Event.Type.VEHICLE_DAMAGE, this.vehicleListener, Event.Priority.Normal, this);
-		pm.registerEvent(Event.Type.VEHICLE_EXIT, this.vehicleListener, Event.Priority.Normal, this);
-		pm.registerEvent(Event.Type.PLAYER_TELEPORT, this.playerListener, Event.Priority.Normal, this);
+		pm.registerEvents(this.vehicleListener, this);
+		pm.registerEvents(this.playerListener, this);
 
 		//Print that the plugin has been enabled!
 		log.log(Level.INFO,"[" + this.getDescription().getName() + "] Plugin enabled! (version " + this.getDescription().getVersion() + ")");
